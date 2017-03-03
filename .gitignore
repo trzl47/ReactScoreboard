@@ -45,3 +45,10 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+
+#node_modules
+node_modules
+
+#project dev files
+vendor
+setting-up-a-react-app-with-webpack
