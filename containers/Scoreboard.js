@@ -8,20 +8,24 @@ import { connect } from 'react-redux';
 import Header from '../components/header.js';
 import Player from '../components/player.js';
 import AddPlayerForm from '../components/addplayerform.js';
-
-
+import PlayerDetail from '../components/PlayerDetail';
 
 class Scoreboard extends Component {
-
   static propTypes = {
     players: PropTypes.array.isRequired
   };
 
   render() {
-    const { dispatch, players } = this.props;
+    const { dispatch, players, selectedPlayerIndex } = this.props;
     const addPlayer = bindActionCreators(PlayerActionCreators.addPlayer, dispatch);
     const removePlayer = bindActionCreators(PlayerActionCreators.removePlayer, dispatch);
     const updateScore = bindActionCreators(PlayerActionCreators.updateScore, dispatch);
+    const selectPlayer = bindActionCreators(PlayerActionCreators.selectPlayer, dispatch);
+
+    let selectedPlayer;
+    if(selectedPlayerIndex !== -1){
+      selectedPlayer = players[selectedPlayerIndex];
+    }
 
     const playerComponents = players.map((player, index) => (
       <Player
@@ -31,9 +35,9 @@ class Scoreboard extends Component {
         key={player.name}
         updateScore={updateScore}
         removePlayer={removePlayer}
+        selectPlayer={selectPlayer}
       />
     ));
-
     return (
       <div className="scoreboard">
         <Header players={players} />
@@ -41,6 +45,9 @@ class Scoreboard extends Component {
           { playerComponents }
         </div>
         <AddPlayerForm addPlayer={addPlayer} />
+        <div className="player-detail">
+          <PlayerDetail selectedPlayer={selectedPlayer} />
+        </div>
       </div>
     );
   }
@@ -48,7 +55,8 @@ class Scoreboard extends Component {
 
 const mapStateToProps = state => (
   {
-    players: state
+    players: state.players,
+    selectedPlayerIndex: state.selectedPlayerIndex
   }
 );
 
